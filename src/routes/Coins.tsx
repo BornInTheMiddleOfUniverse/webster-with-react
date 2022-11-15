@@ -1,9 +1,8 @@
 import styled from "styled-components";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { fetchCoins } from "../api";
-
+ 
 const Header = styled.header`
   height: 15vh;
   display: flex;
