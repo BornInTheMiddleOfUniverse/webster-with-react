@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface IForm {
@@ -8,6 +7,7 @@ interface IForm {
   username: string;
   password: string;
   password1: string;
+  extraError: string;
 }
 
 function ToDoList() {
@@ -15,14 +15,22 @@ function ToDoList() {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<IForm>({
     defaultValues: {
       email: "@naver.com",
     },
   });
-  const onValid = (data: any) => {
-    console.log(data);
+  const onValid = (data: IForm) => {
+    if (data.password !== data.password1) {
+      setError(
+        "password1",
+        { message: "Password match error" },
+        { shouldFocus: true }
+      );
+    }
   };
+  console.log(errors);
   return (
     <div>
       <form
@@ -40,6 +48,17 @@ function ToDoList() {
           placeholder="Email"
         />
         <span>{errors?.email?.message}</span>
+        <input
+          {...register("firstName", {
+            required: "write here",
+            validate: {
+              noJune: (value) =>
+                value.includes("june") ? "No Junes allowed" : true,
+              noCarl: (value) =>
+                value.includes("carl") ? "no Carl allowed" : true,
+            },
+          })}
+        />
 
         <input
           {...register("lastName", { required: "write here" })}
@@ -72,6 +91,7 @@ function ToDoList() {
         <span>{errors?.password1?.message}</span>
 
         <button>Add</button>
+        <span>{errors.extraError?.message}</span>
       </form>
     </div>
   );
